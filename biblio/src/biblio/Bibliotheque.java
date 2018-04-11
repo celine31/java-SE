@@ -6,7 +6,6 @@ package biblio;
 
 import java.util.ArrayList;
 
-
 public class Bibliotheque {
 
     private final ArrayList<Lecteur> lecteurs = new ArrayList<>();
@@ -28,26 +27,28 @@ public class Bibliotheque {
     }
 
     public boolean emprunter(String id, String ref) {
-        Lecteur lecteur=new Lecteur(id);
+        Lecteur lecteur = new Lecteur(id);
         Livre livre = new Livre(ref);
-        return !this.lecteurs.contains(lecteur) 
-                && !this.livres.contains(livre)
-                && !this.estDispo(livre)
+        return this.lecteurs.contains(lecteur)
+                && this.livres.contains(livre) 
+                && this.getEmprunt(livre) == null
                 && this.emprunts.add(new Emprunt(lecteur, livre));
-    }  
+    }
 
     public boolean rendre(String ref) {
-        Livre livre=new Livre(ref);
-        return !this.livres.contains(livre)
-                && !this.estDispo(livre)
-                &&
-    }
-  
-    private boolean estDispo(Livre livre){
-        for(Emprunt emprunt:this.emprunts){
-            if (emprunt.getLivre().equals(livre)) return false;
-        }
-    return true;
+        Livre livre = new Livre(ref);
+        return this.livres.contains(livre)
+                //&& this.getEmprunt(livre) !=null //facultatif car si null remove ne le supprimera pas mais renverra un boolean
+                && this.emprunts.remove(this.getEmprunt(livre));
     }
 
+    private Emprunt getEmprunt(Livre livre) {
+        for (Emprunt emprunt : this.emprunts) {
+            if (emprunt.getLivre().equals(livre)) {
+                return emprunt;
+            }
+        }
+        return null;
     }
+
+}
