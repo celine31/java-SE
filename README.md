@@ -1,2 +1,2 @@
 # java
-exercice en  java
+exercices en  java
